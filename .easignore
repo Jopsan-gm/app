@@ -1,7 +1,6 @@
 # React Native
 node_modules/
 package-lock.json
-yarn.lock
 
 # iOS (archivos específicos a excluir en lugar de todo el directorio)
 ios/Pods/
