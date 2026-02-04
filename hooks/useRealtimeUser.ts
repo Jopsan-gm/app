@@ -6,13 +6,25 @@ import { useLogger } from './useLogger'
 import { useBootstrapStore } from 'store/useBootstrapStore'
 import { bootstrapMe } from 'services/api/user'
 import { BootstrapResponse } from '~types/responses/bootstrap'
+import { UserNotFoundError } from 'services/api/auth'
+import { getAuth, signOut } from '@react-native-firebase/auth'
 
 const refetchBootstrap = async (
   setBootstrap: (bootstrap: BootstrapResponse) => void,
 ) => {
-  const newBootstrap = await bootstrapMe()
-  if (newBootstrap) {
-    setBootstrap(newBootstrap)
+  try {
+    const newBootstrap = await bootstrapMe()
+    if (newBootstrap) {
+      setBootstrap(newBootstrap)
+    }
+  } catch (error) {
+    if (error instanceof UserNotFoundError) {
+      const auth = getAuth()
+      await signOut(auth)
+      const { logout } = useAuthStore.getState()
+      logout()
+    }
+    throw error
   }
 }
 
@@ -48,13 +60,31 @@ export const useRealtimeUser = () => {
 
     const setupRealtimeUpdates = async () => {
       try {
-        const initialBootstrap = await bootstrapMe()
-        if (initialBootstrap) {
-          setBootstrap(initialBootstrap)
-          previousPendingReviewRideIdsRef.current =
-            storedUser.pendingReviewRideIds
-          previousPendingPaymentRideIdsRef.current =
-            storedUser.pendingPaymentRideIds
+        try {
+          const initialBootstrap = await bootstrapMe()
+          if (initialBootstrap) {
+            setBootstrap(initialBootstrap)
+            previousPendingReviewRideIdsRef.current =
+              storedUser.pendingReviewRideIds
+            previousPendingPaymentRideIdsRef.current =
+              storedUser.pendingPaymentRideIds
+          }
+        } catch (error) {
+          if (error instanceof UserNotFoundError) {
+            logger.info(
+              'User not found in database during user setup, logging out',
+              {
+                action: 'user_setup_user_not_found_logout',
+                metadata: { userId: storedUser.id },
+              },
+            )
+            const auth = getAuth()
+            await signOut(auth)
+            const { logout } = useAuthStore.getState()
+            logout()
+            return
+          }
+          throw error
         }
 
         unsubscribe = subscribeToUser(

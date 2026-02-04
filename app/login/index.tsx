@@ -18,10 +18,6 @@ import { handleAppleLogin } from 'services/auth/apple'
 const logo = require('../../assets/logo.png')
 
 export default function Login() {
-  const goToHome = () => {
-    router.replace('/')
-  }
-
   const handleTermsAndConditions = () => {
     Linking.openURL('https://www.carpil.app/terms')
   }
@@ -66,7 +62,6 @@ export default function Login() {
             icon={<GoogleIcon color={COLORS.white} />}
             onPress={async () => {
               await handleGoogleLogin()
-              goToHome()
             }}
           />
           {Platform.OS === 'ios' && (
@@ -75,7 +70,6 @@ export default function Login() {
               icon={<AppleIcon color={COLORS.white} />}
               onPress={async () => {
                 await handleAppleLogin()
-                goToHome()
               }}
             />
           )}

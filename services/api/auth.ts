@@ -4,6 +4,13 @@ import { SignUpResponse } from '~types/responses/auth'
 import { User } from '~types/user'
 import { logger } from '@utils/logs'
 
+export class UserNotFoundError extends Error {
+  constructor() {
+    super('User not found in database')
+    this.name = 'UserNotFoundError'
+  }
+}
+
 const usersUrl = `${API_URL}/users`
 export const signUp = async ({ user }: { user: User }) => {
   const token = useAuthStore.getState().token
@@ -65,6 +72,9 @@ export const login = async ({ user }: { user: User }) => {
         email: user.email,
       },
     })
+    if (response.status === 404) {
+      throw new UserNotFoundError()
+    }
     return null
   }
 
@@ -119,6 +129,9 @@ export const socialLogin = async ({
         email: user.email,
       },
     })
+    if (response.status === 404) {
+      throw new UserNotFoundError()
+    }
     return null
   }
 
