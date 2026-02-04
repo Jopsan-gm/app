@@ -10,13 +10,14 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from '@react-native-firebase/auth'
 import { LoginForm } from '~types/form/login'
 import React from 'react'
 import { EyeOffIcon, EyeOnIcon } from '@components/icons'
 import PrimaryButton from '@components/buttons/primary'
 import { User } from '~types/user'
-import { login, signUp } from 'services/api/auth'
+import { login, signUp, UserNotFoundError } from 'services/api/auth'
 import { useAuthStore } from 'store/useAuthStore'
 import { router } from 'expo-router'
 
@@ -35,7 +36,6 @@ export default function LoginEmail() {
   const {
     control,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<LoginForm>({
     resolver: yupResolver(loginSchema),
@@ -74,10 +74,27 @@ export default function LoginEmail() {
       const setToken = useAuthStore.getState().setToken
       setToken(userToken)
 
-      const userResponse = await login({ user })
-      if (userResponse != null) {
-        loginStore(userResponse, userToken)
-        Alert.alert('¡Bienvenido de vuelta!', 'Sesión iniciada exitosamente')
+      try {
+        const userResponse = await login({ user })
+        if (userResponse != null) {
+          loginStore(userResponse, userToken)
+          Alert.alert('¡Bienvenido de vuelta!', 'Sesión iniciada exitosamente')
+          router.replace('/')
+        }
+      } catch (loginError) {
+        if (loginError instanceof UserNotFoundError) {
+          const auth = getAuth()
+          await signOut(auth)
+          const { logout } = useAuthStore.getState()
+          logout()
+          Alert.alert(
+            'Cuenta no registrada',
+            'Tu cuenta no está registrada en esta base de datos. Por favor, contacta a soporte técnico.',
+          )
+          setIsLoading(false)
+          return
+        }
+        throw loginError
       }
     } catch (error: any) {
       if (error.code === 'auth/invalid-credential') {
@@ -144,8 +161,6 @@ export default function LoginEmail() {
         console.log('Invalid email format')
       }
     } finally {
-      reset()
-      router.replace('/')
       setIsLoading(false)
     }
   }

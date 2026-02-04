@@ -4,6 +4,7 @@ import { BootstrapResponse } from '~types/responses/bootstrap'
 import { UserResponse } from '~types/responses/user'
 import { UserInfoResponse } from '~types/user'
 import { logger } from '@utils/logs'
+import { UserNotFoundError } from './auth'
 
 export const getUser = async (id: string, token: string) => {
   const requestOptions = {
@@ -22,6 +23,9 @@ export const getUser = async (id: string, token: string) => {
         userId: id,
       },
     })
+    if (response.status === 404) {
+      throw new UserNotFoundError()
+    }
     return null
   }
 
@@ -57,6 +61,9 @@ export const bootstrapMe = async () => {
         status: response.status,
       },
     })
+    if (response.status === 404) {
+      throw new UserNotFoundError()
+    }
     return null
   }
 

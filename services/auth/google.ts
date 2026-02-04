@@ -13,10 +13,12 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithCredential,
+  signOut,
 } from '@react-native-firebase/auth'
 import { User } from '~types/user'
 import { useAuthStore } from 'store/useAuthStore'
-import { socialLogin } from 'services/api/auth'
+import { socialLogin, UserNotFoundError } from 'services/api/auth'
+import { router } from 'expo-router'
 
 const handleSignInSuccess = async (idToken: string) => {
   const auth = getAuth()
@@ -40,12 +42,28 @@ const handleSignInSuccess = async (idToken: string) => {
   const setToken = useAuthStore.getState().setToken
   setToken(firebaseIdToken)
 
-  const loginStore = useAuthStore.getState().login
-  const userResponse = await socialLogin({ user, token: firebaseIdToken })
+  try {
+    const loginStore = useAuthStore.getState().login
+    const userResponse = await socialLogin({ user, token: firebaseIdToken })
 
-  if (userResponse != null) {
-    loginStore(userResponse, firebaseIdToken)
-    Alert.alert('¡Bienvenido de vuelta!', 'Sesión iniciada exitosamente')
+    if (userResponse != null) {
+      loginStore(userResponse, firebaseIdToken)
+      Alert.alert('¡Bienvenido de vuelta!', 'Sesión iniciada exitosamente')
+      router.replace('/')
+    }
+  } catch (error) {
+    if (error instanceof UserNotFoundError) {
+      const auth = getAuth()
+      await signOut(auth)
+      const { logout } = useAuthStore.getState()
+      logout()
+      Alert.alert(
+        'Cuenta no registrada',
+        'Tu cuenta no está registrada en esta base de datos. Por favor, contacta a soporte técnico.',
+      )
+      return
+    }
+    throw error
   }
 }
 
