@@ -7,14 +7,15 @@ import { router } from 'expo-router'
 import ActionButton from '@components/design-system/buttons/action-button'
 import Avatar from '@components/avatar'
 import { COLORS } from '@utils/constansts/colors'
-import { SENTRY_DSN } from '@utils/constansts/api'
+import { SENTRY_DSN, API_URL } from '@utils/constansts/api'
 import { ChevronRightIcon } from '@components/icons'
 import { GoogleOneTapSignIn } from '@react-native-google-signin/google-signin'
 import * as Sentry from '@sentry/react-native'
 import Constants from 'expo-constants'
 import { logger } from '@utils/logs'
+import { getEnvironment } from '@utils/environment'
 
-const environment = (process.env as any).EXPO_PUBLIC_ENVIRONMENT ?? 'unknown'
+const environment = getEnvironment()
 const appVersion = Constants.expoConfig?.version ?? 'unknown'
 
 export default function Profile() {
@@ -54,6 +55,14 @@ export default function Profile() {
       username: user.name || undefined,
     })
     Sentry.showFeedbackWidget()
+  }
+
+  const handleDebugInfoLongPress = () => {
+    Alert.alert(
+      'Información de Debug',
+      `Ambiente: ${environment}\nAPI: ${API_URL}`,
+      [{ text: 'OK' }],
+    )
   }
 
   const handleDebugInfoPress = () => {
@@ -166,16 +175,13 @@ export default function Profile() {
         </View>
 
         <Pressable
-          style={({ pressed }) => [
-            styles.debugInfo,
-            pressed && styles.debugInfoPressed,
-          ]}
+          style={styles.debugContainer}
           onPress={handleDebugInfoPress}
+          onLongPress={handleDebugInfoLongPress}
         >
           <Text style={styles.debugInfoText}>
-            Versión {appVersion} ({environment})
+            Versión {appVersion}
           </Text>
-          <Text style={styles.debugInfoHint}>Toca dos veces para probar</Text>
         </Pressable>
       </View>
     </Screen>
@@ -230,27 +236,14 @@ const styles = StyleSheet.create({
   logoutContainer: {
     marginTop: 'auto',
   },
-  debugInfo: {
+  debugContainer: {
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: COLORS.inactive_gray,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: COLORS.border_gray,
-    marginTop: 8,
-  },
-  debugInfoPressed: {
-    backgroundColor: COLORS.gray_600,
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   debugInfoText: {
     color: COLORS.gray_400,
     fontSize: 12,
-    fontWeight: '600',
-  },
-  debugInfoHint: {
-    color: COLORS.gray_600,
-    fontSize: 10,
-    marginTop: 2,
+    textAlign: 'center',
   },
 })

@@ -10,9 +10,9 @@ import { IOS_GOOGLE_CLIENT_ID, SENTRY_DSN } from '@utils/constansts/api'
 import * as Sentry from '@sentry/react-native'
 import { initializeLogger } from '@utils/logs'
 import { logger } from '@utils/logs'
+import { getEnvironment } from '@utils/environment'
 
-const environment =
-  (process.env as any).EXPO_PUBLIC_ENVIRONMENT ?? 'development'
+const environment = getEnvironment()
 
 Sentry.init({
   dsn: SENTRY_DSN,

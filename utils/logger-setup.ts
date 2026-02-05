@@ -4,13 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Constants from 'expo-constants'
 import { Platform } from 'react-native'
 import { LoggerConfig, LogLevel } from '~types/logger'
+import { getEnvironment } from '@utils/environment'
 
 const SAMPLING_KEY = '@logger_sampling_enabled'
 const SESSION_START_KEY = '@logger_session_start'
 const SESSION_DURATION = 24 * 60 * 60 * 1000
 
-const environment =
-  (process.env as any).EXPO_PUBLIC_ENVIRONMENT ?? 'development'
+const environment = getEnvironment()
 
 class LoggerSetup {
   private config: LoggerConfig | null = null
