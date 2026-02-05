@@ -10,7 +10,8 @@
       "env": {
         "APP_VARIANT": "development",
         "EXPO_PUBLIC_ENVIRONMENT": "development",
-        "EXPO_PUBLIC_SENTRY_DSN": "https://ee0a00d649ff648e78f5733528e53a72@o4510399716392960.ingest.us.sentry.io/4510399717310464"
+        "EXPO_PUBLIC_SENTRY_DSN": "https://ee0a00d649ff648e78f5733528e53a72@o4510399716392960.ingest.us.sentry.io/4510399717310464",
+        "NPM_TOKEN_GOOGLE_SIGN_IN": "${NPM_TOKEN_GOOGLE_SIGN_IN}"
       }
     },
     "preview": {
@@ -18,7 +19,8 @@
       "env": {
         "APP_VARIANT": "preview",
         "EXPO_PUBLIC_ENVIRONMENT": "preview",
-        "EXPO_PUBLIC_SENTRY_DSN": "https://ee0a00d649ff648e78f5733528e53a72@o4510399716392960.ingest.us.sentry.io/4510399717310464"
+        "EXPO_PUBLIC_SENTRY_DSN": "https://ee0a00d649ff648e78f5733528e53a72@o4510399716392960.ingest.us.sentry.io/4510399717310464",
+        "NPM_TOKEN_GOOGLE_SIGN_IN": "${NPM_TOKEN_GOOGLE_SIGN_IN}"
       }
     },
     "preview-production": {
@@ -28,7 +30,8 @@
       "env": {
         "APP_VARIANT": "preview",
         "EXPO_PUBLIC_ENVIRONMENT": "preview",
-        "EXPO_PUBLIC_SENTRY_DSN": "https://ee0a00d649ff648e78f5733528e53a72@o4510399716392960.ingest.us.sentry.io/4510399717310464"
+        "EXPO_PUBLIC_SENTRY_DSN": "https://ee0a00d649ff648e78f5733528e53a72@o4510399716392960.ingest.us.sentry.io/4510399717310464",
+        "NPM_TOKEN_GOOGLE_SIGN_IN": "${NPM_TOKEN_GOOGLE_SIGN_IN}"
       }
     },
     "production": {
@@ -36,7 +39,8 @@
       "env": {
         "APP_VARIANT": "production",
         "EXPO_PUBLIC_ENVIRONMENT": "production",
-        "EXPO_PUBLIC_SENTRY_DSN": "https://ee0a00d649ff648e78f5733528e53a72@o4510399716392960.ingest.us.sentry.io/4510399717310464"
+        "EXPO_PUBLIC_SENTRY_DSN": "https://ee0a00d649ff648e78f5733528e53a72@o4510399716392960.ingest.us.sentry.io/4510399717310464",
+        "NPM_TOKEN_GOOGLE_SIGN_IN": "${NPM_TOKEN_GOOGLE_SIGN_IN}"
       }
     }
   }, 
