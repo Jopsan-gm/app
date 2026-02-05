@@ -10,6 +10,7 @@ import * as Notifications from 'expo-notifications'
 import { registerForPushNotificationsAsync } from 'services/push-notifications/register-push-notifications'
 import { setPushNotificationToken } from 'services/api/notifications'
 import { handleNotificationNavigation } from 'services/push-notifications/handle-notification-navigation'
+import { useAuthStore } from 'store/useAuthStore'
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -50,18 +51,12 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   const [notification, setNotification] =
     useState<Notifications.Notification | null>(null)
   const [error, setError] = useState<Error | null>(null)
+  const token = useAuthStore((state) => state.token)
 
   const notificationListener = useRef<Notifications.EventSubscription>()
   const responseListener = useRef<Notifications.EventSubscription>()
 
   useEffect(() => {
-    registerForPushNotificationsAsync()
-      .then(async (token) => {
-        await setPushNotificationToken(token)
-        setExpoPushToken(token)
-      })
-      .catch((error) => setError(error))
-
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification)
@@ -85,6 +80,22 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (!token) {
+      return
+    }
+
+    registerForPushNotificationsAsync()
+      .then(async (pushToken) => {
+        await setPushNotificationToken(pushToken)
+        setExpoPushToken(pushToken)
+        setError(null)
+      })
+      .catch((error) => {
+        setError(error)
+      })
+  }, [token])
 
   return (
     <NotificationContext.Provider
