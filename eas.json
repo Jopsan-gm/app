@@ -27,6 +27,7 @@
       "distribution": "store",
       "channel": "preview",
       "autoIncrement": true,
+      "environment": "preview",
       "env": {
         "APP_VARIANT": "preview",
         "EXPO_PUBLIC_ENVIRONMENT": "preview",
@@ -43,7 +44,7 @@
         "NPM_TOKEN_GOOGLE_SIGN_IN": "${NPM_TOKEN_GOOGLE_SIGN_IN}"
       }
     }
-  }, 
+  },
   "submit": {
     "production": {}
   }
