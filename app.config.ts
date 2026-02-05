@@ -30,9 +30,13 @@ export default (config: ExpoConfig) => ({
     resizeMode: 'contain',
     backgroundColor: '#ffffff',
   },
+  updates: {
+    url: 'https://u.expo.dev/9abf5b0c-6e77-4c03-8b56-a09e64fb244e',
+  },
   ios: {
     supportsTablet: true,
     bundleIdentifier: getUniqueIdentifier(),
+    runtimeVersion: '1.0.0',
     config: {
       googleMapsApiKey: GOOGLE_MAPS_API_KEY,
     },
@@ -62,6 +66,9 @@ export default (config: ExpoConfig) => ({
       backgroundImage: './assets/icons/android-icon.png',
       monochromeImage: './assets/icons/android-icon.png',
       backgroundColor: '#1F2937',
+    },
+    runtimeVersion: {
+      policy: 'appVersion',
     },
     config: {
       googleMaps: {
@@ -120,5 +127,7 @@ export default (config: ExpoConfig) => ({
     eas: {
       projectId: '9abf5b0c-6e77-4c03-8b56-a09e64fb244e',
     },
+    environment: process.env.EXPO_PUBLIC_ENVIRONMENT,
+    apiUrl: process.env.EXPO_PUBLIC_API_URL,
   },
 })

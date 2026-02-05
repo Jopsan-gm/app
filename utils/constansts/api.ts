@@ -1,7 +1,12 @@
 import { Platform } from 'react-native'
+import Constants from 'expo-constants'
 
 const getApiBaseUrl = () => {
-  const envUrl = (process.env as any).EXPO_PUBLIC_API_URL
+  const envUrlFromExtra = Constants.expoConfig?.extra?.apiUrl as
+    | string
+    | undefined
+  const envUrlFromProcess = (process.env as any).EXPO_PUBLIC_API_URL
+  const envUrl = envUrlFromExtra || envUrlFromProcess
 
   if (envUrl) {
     const isAndroid = Platform.OS === 'android'
