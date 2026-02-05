@@ -51,3 +51,7 @@ google-services.json
 google-services-*.json
 GoogleService-Info.plist
 GoogleService-Info-*.plist
+
+# NPM/Yarn config (contienen tokens de autenticación)
+.npmrc
+.yarnrc.yml

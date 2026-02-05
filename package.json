@@ -9,7 +9,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "eslint .",
-    "dev": "APP_VARIANT=development expo start"
+    "dev": "APP_VARIANT=development expo start",
+    "preinstall": "node scripts/setup-npm-auth.js"
   },
   "dependencies": {
     "@babel/preset-env": "^7.26.9",
