@@ -9,7 +9,7 @@ import { View, StyleSheet, Text, Alert } from 'react-native'
 import ActionButton from '@components/design-system/buttons/action-button'
 import InteractiveModal from '@components/modal/interactive-modal'
 import LocationCard from 'app/ride-navigation/components/location-card'
-import Map from '@components/design-system/maps/map'
+import MockMap from '@components/design-system/maps/mock-map'
 import PassengersPill from '@components/create-ride-modal/passengers'
 import PricePill from '@components/create-ride-modal/price'
 import SchedulePill from '@components/create-ride-modal/schedule'
@@ -87,7 +87,7 @@ export default function RideOverview() {
 
   return (
     <View style={styles.container}>
-      <Map
+      <MockMap
         origin={origin}
         destination={destination}
         meetingPoint={meetingPoint}

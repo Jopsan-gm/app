@@ -6,7 +6,7 @@ import { View, StyleSheet, Text, Pressable } from 'react-native'
 import ActionButton from '@components/design-system/buttons/action-button'
 import InteractiveModal from '@components/modal/interactive-modal'
 import LocationCard from 'app/ride-navigation/components/location-card'
-import Map from '@components/design-system/maps/map'
+import MockMap from '@components/design-system/maps/mock-map'
 
 export default function RideType() {
   const { origin, destination, meetingPoint } = useContext(
@@ -34,7 +34,7 @@ export default function RideType() {
   }
   return (
     <View style={styles.container}>
-      <Map
+      <MockMap
         origin={origin}
         destination={destination}
         meetingPoint={meetingPoint ?? undefined}

@@ -9,7 +9,7 @@ import { router } from 'expo-router'
 import ActionButton from '@components/design-system/buttons/action-button'
 import InteractiveModal from '@components/modal/interactive-modal'
 import LocationCard from 'app/ride-navigation/components/location-card'
-import Map from '@components/design-system/maps/map'
+import MockMap from '@components/design-system/maps/mock-map'
 import SchedulePill from '@components/create-ride-modal/schedule'
 
 const TEN_MINUTES_MS = 10 * 60000
@@ -66,7 +66,7 @@ export default function RideRequestOverview() {
 
   return (
     <View style={styles.container}>
-      <Map origin={origin} destination={destination} />
+      <MockMap origin={origin} destination={destination} />
       <InteractiveModal
         AlwaysVisible={
           <LocationCard origin={origin} destination={destination} />

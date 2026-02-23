@@ -22,7 +22,7 @@ import StarRating from 'app/ratings/star-rating'
 import { RatingComponentProps } from 'app/ratings/passengers-rating'
 import { createRating } from 'services/api/ratings'
 import ActionButton from '@components/design-system/buttons/action-button'
-import MapImage from '@components/design-system/maps/image'
+import MockMapImage from '@components/design-system/maps/mock-map-image'
 import { useLogger } from 'hooks/useLogger'
 import { bootstrapMe } from 'services/api/user'
 import { useBootstrapStore } from 'store/useBootstrapStore'
@@ -379,7 +379,7 @@ export default function Checkout() {
             ]}
             showsVerticalScrollIndicator={false}
           >
-            <MapImage origin={ride.origin} destination={ride.destination} />
+            <MockMapImage origin={ride.origin} destination={ride.destination} />
             <Text style={styles.title}>¡Tu viaje ha sido completado!</Text>
             <Text style={styles.subtitle}>Gracias por viajar con Carpil.</Text>
             {!isDriver && (

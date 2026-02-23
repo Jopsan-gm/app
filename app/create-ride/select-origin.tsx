@@ -4,7 +4,7 @@ import 'react-native-get-random-values'
 import { useContext } from 'react'
 import { SelectLocationContext } from '@context/select-location'
 import SafeScreen from '@components/safe-screen'
-import PlacesAutocomplete from '@components/places-autocomplete'
+import MockPlacesAutocomplete from '@components/mock-places-autocomplete'
 import { COLORS } from '@utils/constansts/colors'
 
 export default function SelectOrigin() {
@@ -14,7 +14,7 @@ export default function SelectOrigin() {
   return (
     <SafeScreen backgroundColor={COLORS.dark_gray} applyTopInset={false}>
       <View style={{ flex: 1, paddingBottom: 10 }}>
-        <PlacesAutocomplete
+        <MockPlacesAutocomplete
           placeholder={'¿Desde dónde sales?'}
           onPress={(location) => {
             setOrigin(location)

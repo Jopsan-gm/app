@@ -12,7 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import FooterCard from './components/footer-card'
 import InteractiveModal from '@components/modal/interactive-modal'
 import LocationCard from './components/location-card'
-import Map from '@components/design-system/maps/map'
+import MockMap from '@components/design-system/maps/mock-map'
 import PassengerCard from './components/passenger-card'
 
 export default function RideNavigationScreen() {
@@ -77,7 +77,7 @@ export default function RideNavigationScreen() {
 
   return (
     <View style={styles.container}>
-      <Map origin={ride.origin} destination={ride.destination} />
+      <MockMap origin={ride.origin} destination={ride.destination} />
       <InteractiveModal
         AlwaysVisible={
           <LocationCard origin={ride.origin} destination={ride.destination} />
