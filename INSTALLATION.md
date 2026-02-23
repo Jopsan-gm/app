@@ -22,6 +22,7 @@ cd app
 
 ### 2️⃣ Environment Variables
 
+Ask for env variables to the Carpil team. 
 Create `.env.local` with `NPM_TOKEN_GOOGLE_SIGN_IN` (see template file for reference).
 
 **macOS/Linux:**
@@ -48,6 +49,7 @@ yarn install
 
 ### 4️⃣ Environment Configuration
 
+Ask Carpil team for this files. 
 Add Firebase config files to project root:
 - `GoogleService-Info.plist` (iOS)
 - `google-services.json` (Android)
