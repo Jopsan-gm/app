@@ -1,5 +1,5 @@
 import { Text, StyleSheet, View } from 'react-native'
-import { CarIcon, MessagesIcon, ProfileIcon } from '@components/icons'
+import { CarIcon, MessagesIcon, ProfileIcon, TrophyIcon } from '@components/icons'
 import { COLORS } from '@utils/constansts/colors'
 import { Tabs } from 'expo-router'
 import { useBootstrap } from 'hooks/useBootstrap'
@@ -81,6 +81,21 @@ export default function TabsLayout() {
             header: () => (
               <HeaderTitle
                 title="Chats"
+                color={COLORS.dark_gray}
+                hasBannerAbove={hasBanner}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="leaderboard"
+          options={{
+            tabBarLabel: 'Ranking',
+            tabBarIcon: ({ color }) => <TrophyIcon color={color} />,
+            headerShown: true,
+            header: () => (
+              <HeaderTitle
+                title="Ranking"
                 color={COLORS.dark_gray}
                 hasBannerAbove={hasBanner}
               />
