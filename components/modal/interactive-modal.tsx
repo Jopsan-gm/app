@@ -1,18 +1,23 @@
 import { COLORS } from '@utils/constansts/colors'
 import { Modalize } from 'react-native-modalize'
 import { Platform, View, StyleSheet } from 'react-native'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 interface InteractiveModalProps {
   collapsedHeight?: number
   AlwaysVisible: React.ReactNode
   Content: React.ReactNode
+  forceOpen?: boolean
+  onStatusChange?: (isExpanded: boolean) => void
 }
+
 export default function InteractiveModal({
   collapsedHeight = 145,
   AlwaysVisible,
   Content,
+  forceOpen = false,
+  onStatusChange,
 }: InteractiveModalProps) {
   const modalizeRef = useRef<Modalize>(null)
   const [isExpanded, setIsExpanded] = useState(false)
@@ -30,8 +35,17 @@ export default function InteractiveModal({
     Platform.OS === 'ios' ? insets.top + 20 : ANDROID_HEADER_HEIGHT + 35
 
   const handlePositionChange = (position: 'top' | 'initial') => {
-    setIsExpanded(position === 'top')
+    const expanded = position === 'top'
+    setIsExpanded(expanded)
+    onStatusChange?.(expanded)
   }
+
+  useEffect(() => {
+    if (forceOpen && modalizeRef.current) {
+      // Forzar la apertura a la posición 'top' explícitamente
+      modalizeRef.current.open('top')
+    }
+  }, [forceOpen])
 
   return (
     <Modalize
@@ -44,11 +58,15 @@ export default function InteractiveModal({
       onPositionChange={handlePositionChange}
       modalStyle={styles.modalStyle}
       modalTopOffset={modalTopOffset}
+      withOverlay={false}
+      closeOnOverlayTap={false}
     >
       <View style={styles.contentContainer}>
         {!isExpanded && <View style={styles.handle} />}
         <View>{AlwaysVisible}</View>
-        {isExpanded && <View style={styles.expandableContent}>{Content}</View>}
+        {isExpanded && (
+          <View style={styles.expandableContent}>{Content}</View>
+        )}
       </View>
     </Modalize>
   )

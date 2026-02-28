@@ -5,7 +5,7 @@ import { CreateRideRequest } from '~types/requests/ride'
 import { isAfter } from '@formkit/tempo'
 import { router } from 'expo-router'
 import { SelectLocationContext } from '@context/select-location'
-import { View, StyleSheet, Text, Alert } from 'react-native'
+import { View, StyleSheet, Text, Alert, Pressable } from 'react-native'
 import ActionButton from '@components/design-system/buttons/action-button'
 import InteractiveModal from '@components/modal/interactive-modal'
 import LocationCard from 'app/ride-navigation/components/location-card'
@@ -23,11 +23,12 @@ export default function RideOverview() {
   const { origin, destination, meetingPoint, reset } = useContext(
     SelectLocationContext,
   )
-
   const [passengers, setPassengers] = useState<number>(3)
   const [date, setDate] = useState<Date>(getMinDate)
   const [price, setPrice] = useState('')
   const [minDate, setMinDate] = useState<Date>(getMinDate)
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [forceOpen, setForceOpen] = useState(false)
 
   const handleMinusPassengers = () => {
     if (passengers > 1) {
@@ -93,6 +94,13 @@ export default function RideOverview() {
         meetingPoint={meetingPoint}
       />
       <InteractiveModal
+        forceOpen={forceOpen}
+        onStatusChange={(expanded) => {
+          setIsExpanded(expanded)
+          if (expanded) {
+            setForceOpen(false)
+          }
+        }}
         AlwaysVisible={
           <LocationCard origin={origin} destination={destination} />
         }
@@ -123,6 +131,17 @@ export default function RideOverview() {
           </View>
         }
       />
+      {!isExpanded && (
+        <Pressable
+          onPress={() => setForceOpen(true)}
+          style={({ pressed }) => [
+            styles.continueButton,
+            pressed && { opacity: 0.8 },
+          ]}
+        >
+          <Text style={styles.continueText}>Continuar</Text>
+        </Pressable>
+      )}
     </View>
   )
 }
@@ -133,5 +152,22 @@ const styles = StyleSheet.create({
   },
   contentBody: {
     gap: 16,
+  },
+  continueButton: {
+    position: 'absolute',
+    bottom: 20,
+    left: 15,
+    right: 15,
+    backgroundColor: COLORS.primary,
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    zIndex: 9999,
+    elevation: 10,
+  },
+  continueText: {
+    color: COLORS.white,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 })

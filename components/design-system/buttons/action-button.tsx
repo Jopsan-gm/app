@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import {
-  Pressable,
   Text,
   StyleSheet,
   ActivityIndicator,
   StyleProp,
   ViewStyle,
+  Pressable,
 } from 'react-native'
 import { COLORS } from '@utils/constansts/colors'
 
@@ -58,11 +58,11 @@ export default function ActionButton({
       style={({ pressed }) => [
         styles.button,
         getButtonStyle(),
-        pressed && !isDisabled && styles.pressedButton,
         isDisabled &&
-          (type === 'outline'
-            ? styles.disabledOutlineButton
-            : styles.disabledButton),
+        (type === 'outline'
+          ? styles.disabledOutlineButton
+          : styles.disabledButton),
+        pressed && !isDisabled && { opacity: 0.8 },
         style,
       ]}
     >

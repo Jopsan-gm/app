@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { COLORS } from '@utils/constansts/colors'
 import { SelectLocationContext } from '@context/select-location'
-import { View, StyleSheet, Text, Alert } from 'react-native'
+import { View, StyleSheet, Text, Alert, Pressable } from 'react-native'
 import { isAfter } from '@formkit/tempo'
 import { createRideRequest } from 'services/api/ride-request'
 import { CreateRideRequestInput } from '~types/ride-request'
@@ -20,6 +20,8 @@ export default function RideRequestOverview() {
   const { origin, destination, reset } = useContext(SelectLocationContext)
   const [date, setDate] = useState<Date>(getMinDate)
   const [minDate, setMinDate] = useState<Date>(getMinDate)
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [forceOpen, setForceOpen] = useState(false)
 
   const handleSearchRide = async () => {
     if (!origin || !destination) {
@@ -68,6 +70,13 @@ export default function RideRequestOverview() {
     <View style={styles.container}>
       <MockMap origin={origin} destination={destination} />
       <InteractiveModal
+        forceOpen={forceOpen}
+        onStatusChange={(expanded) => {
+          setIsExpanded(expanded)
+          if (expanded) {
+            setForceOpen(false)
+          }
+        }}
         AlwaysVisible={
           <LocationCard origin={origin} destination={destination} />
         }
@@ -90,6 +99,17 @@ export default function RideRequestOverview() {
           </View>
         }
       />
+      {!isExpanded && (
+        <Pressable
+          onPress={() => setForceOpen(true)}
+          style={({ pressed }) => [
+            styles.continueButton,
+            pressed && { opacity: 0.8 },
+          ]}
+        >
+          <Text style={styles.continueText}>Continuar</Text>
+        </Pressable>
+      )}
     </View>
   )
 }
@@ -105,5 +125,22 @@ const styles = StyleSheet.create({
     color: COLORS.gray_400,
     fontSize: 14,
     textAlign: 'center',
+  },
+  continueButton: {
+    position: 'absolute',
+    bottom: 20,
+    left: 15,
+    right: 15,
+    backgroundColor: COLORS.primary,
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    zIndex: 9999,
+    elevation: 10,
+  },
+  continueText: {
+    color: COLORS.white,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 })

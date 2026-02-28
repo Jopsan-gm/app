@@ -2,7 +2,7 @@ import { COLORS } from '@utils/constansts/colors'
 import { completeRide, getRide } from 'services/api/rides'
 import { logger } from '@utils/logs'
 import { Ride } from '~types/ride'
-import { Text, View, StyleSheet, Platform, ScrollView } from 'react-native'
+import { Text, View, StyleSheet, Platform, ScrollView, Pressable } from 'react-native'
 import { useAuthStore } from 'store/useAuthStore'
 import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
@@ -21,6 +21,8 @@ export default function RideNavigationScreen() {
   const [ride, setRide] = useState<Ride | null>(null)
   const [hasError, setHasError] = useState(false)
   const user = useAuthStore((state) => state.user)
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [forceOpen, setForceOpen] = useState(false)
 
   const insets = useSafeAreaInsets()
 
@@ -79,6 +81,13 @@ export default function RideNavigationScreen() {
     <View style={styles.container}>
       <MockMap origin={ride.origin} destination={ride.destination} />
       <InteractiveModal
+        forceOpen={forceOpen}
+        onStatusChange={(expanded) => {
+          setIsExpanded(expanded)
+          if (expanded) {
+            setForceOpen(false)
+          }
+        }}
         AlwaysVisible={
           <LocationCard origin={ride.origin} destination={ride.destination} />
         }
@@ -119,6 +128,17 @@ export default function RideNavigationScreen() {
           </>
         }
       />
+      {!isExpanded && (
+        <Pressable
+          onPress={() => setForceOpen(true)}
+          style={({ pressed }) => [
+            styles.continueButton,
+            pressed && { opacity: 0.8 },
+          ]}
+        >
+          <Text style={styles.continueText}>Continuar</Text>
+        </Pressable>
+      )}
     </View>
   )
 }
@@ -165,5 +185,22 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     marginTop: 16,
+  },
+  continueButton: {
+    position: 'absolute',
+    bottom: 20,
+    left: 15,
+    right: 15,
+    backgroundColor: COLORS.primary,
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    zIndex: 9999,
+    elevation: 10,
+  },
+  continueText: {
+    color: COLORS.white,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 })

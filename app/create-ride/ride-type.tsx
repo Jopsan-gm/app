@@ -2,7 +2,8 @@ import { useContext, useState } from 'react'
 import { COLORS } from '@utils/constansts/colors'
 import { router } from 'expo-router'
 import { SelectLocationContext } from '@context/select-location'
-import { View, StyleSheet, Text, Pressable } from 'react-native'
+import { View, StyleSheet, Text, Pressable as RNPressable } from 'react-native'
+import { Pressable } from 'react-native-gesture-handler'
 import ActionButton from '@components/design-system/buttons/action-button'
 import InteractiveModal from '@components/modal/interactive-modal'
 import LocationCard from 'app/ride-navigation/components/location-card'
@@ -12,10 +13,11 @@ export default function RideType() {
   const { origin, destination, meetingPoint } = useContext(
     SelectLocationContext,
   )
-
   const [selectedType, setSelectedType] = useState<'driver' | 'passenger'>(
     'driver',
   )
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [forceOpen, setForceOpen] = useState(false)
 
   const handleSelectType = (type: 'driver' | 'passenger') => {
     setSelectedType(type)
@@ -32,6 +34,7 @@ export default function RideType() {
       router.push('/create-ride/ride-request-overview')
     }
   }
+
   return (
     <View style={styles.container}>
       <MockMap
@@ -40,6 +43,13 @@ export default function RideType() {
         meetingPoint={meetingPoint ?? undefined}
       />
       <InteractiveModal
+        forceOpen={forceOpen}
+        onStatusChange={(expanded) => {
+          setIsExpanded(expanded)
+          if (expanded) {
+            setForceOpen(false)
+          }
+        }}
         AlwaysVisible={
           <LocationCard origin={origin} destination={destination} />
         }
@@ -104,6 +114,17 @@ export default function RideType() {
           </View>
         }
       />
+      {!isExpanded && (
+        <RNPressable
+          onPress={() => setForceOpen(true)}
+          style={({ pressed }) => [
+            styles.continueButton,
+            pressed && { opacity: 0.8 },
+          ]}
+        >
+          <Text style={styles.continueText}>Continuar</Text>
+        </RNPressable>
+      )}
     </View>
   )
 }
@@ -152,5 +173,22 @@ const styles = StyleSheet.create({
   },
   inactiveSubtitleBox: {
     color: COLORS.gray_600,
+  },
+  continueButton: {
+    position: 'absolute',
+    bottom: 20,
+    left: 15,
+    right: 15,
+    backgroundColor: COLORS.primary,
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    zIndex: 9999,
+    elevation: 10,
+  },
+  continueText: {
+    color: COLORS.white,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 })
