@@ -100,3 +100,7 @@ export const ArrowUpRightIcon = ({ color, size = 24 }: IconProps) => (
 export const ChevronRightIcon = ({ color, size = 24 }: IconProps) => (
   <Ionicons name="chevron-forward" size={size} color={color} />
 )
+
+export const TrophyIcon = ({ color, size = 24 }: IconProps) => (
+  <Ionicons name="trophy" size={size} color={color} />
+)
